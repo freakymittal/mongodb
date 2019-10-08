@@ -8,15 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/npm/cli.git"
+    "url": "https://github.com/mayank-mittal/mongodb.git"
   },
-  "homepage": "https://www.intugine.com"
   "description": "Mongodb Native - Promisified, Simplified",
   "license": "MIT",
   "main": "index.js",
   "name": "@intugine-technologies/mongodb",
   "keywords": ["mongo", "mongodb", "intugine", "promise"],
-  "version": "1.12.3",
+  "version": "1.12.4",
   "engines": {
     "node": ">=8.0.0 <12.10"
   }
