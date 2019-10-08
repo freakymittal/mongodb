@@ -52,6 +52,8 @@ const make_usable_object = (client, dbname) => {
       .collection(collection)
       .aggregate(pipeline, options)
       .toArray(),
+    drop_collection: (collection) => client.db(dbname).collection(collection).drop(),
+    distinct: (collection, key, query = {}, options = {}) => client.db(dbname).collection(collection).distinct(key, query, options),
     close: () => client.close(),
   };
 };

@@ -1,24 +1,44 @@
 const mongo = require('../index.js');
-
-process.env.dburl = 'mongodb+srv://intugine:NkVPR6VQUEXhyUwYHgQg4hjHspDH5k9a@cluster0-zhjde.mongodb.net';
-process.env.dbname = 'telenity';
-let db = null;
-mongo(process.env.dburl, process.env.dbname)
-  .then((DB) => {
-    db = DB;
-    console.log('Connnected');
-    return db.db('telenitytracking').count('trips');
-    // return db.aggregate('consents', [{$group: {_id: "$status", data: {$first: "$$ROOT"}}}]);
-    // return db.read('tokens', {}, 1, 0, {token: 1, _id: 0})
+const config = require('../config.json');
+const assert = require('assert');
+describe("Array", () => {
+  describe("#indexOf()", () => {
+    it("should return -1 when the value is not present", () => {
+      assert.equal([1,2,3].indexOf(4), -1)
+    })
+    it("should return -1 when the value is not present", () => {
+      assert.equal([1,2,3].indexOf(4), -1)
+    })
   })
-  .then((r) => {
-    console.log(r);
-    db.close();
-    // console.log('Disconnected');
+  describe("#indexOf()", () => {
+    it("should return -1 when the value is not present", () => {
+      assert.equal([1,2,3].indexOf(4), -1)
+    })
+    it("should return -1 when the value is not present", () => {
+      assert.equal([1,2,3].indexOf(4), -1)
+    })
   })
-  .catch((e) => {
-    console.error(e);
-  });
+})
+// process.env.dburl = 'mongodb+srv://intugine:NkVPR6VQUEXhyUwYHgQg4hjHspDH5k9a@cluster0-zhjde.mongodb.net';
+// process.env.dbname = 'furlenco';
+// let db = null;
+// mongo(process.env.dburl, process.env.dbname)
+//   .then((DB) => {
+//     db = DB;
+//     console.log('Connnected');
+//     return db.distinct('devices', "id")
+//     // return db.db('telenitytracking').count('trips');
+//     // return db.aggregate('consents', [{$group: {_id: "$status", data: {$first: "$$ROOT"}}}]);
+//     // return db.read('tokens', {}, 1, 0, {token: 1, _id: 0})
+//   })
+//   .then((r) => {
+//     console.log(r);
+//     db.close();
+//     // console.log('Disconnected');
+//   })
+//   .catch((e) => {
+//     console.error('Error', e);
+//   });
 // const MongoClient = require('mongodb').MongoClient;
 // const assert = require('assert');
 

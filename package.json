@@ -14,9 +14,20 @@
   "license": "MIT",
   "main": "index.js",
   "name": "@intugine-technologies/mongodb",
-  "keywords": ["mongo", "mongodb", "intugine", "promise"],
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha test/index.js"
+  },
+  "keywords": [
+    "mongo",
+    "mongodb",
+    "intugine",
+    "promise"
+  ],
   "version": "1.12.4",
   "engines": {
     "node": ">=8.0.0 <12.10"
+  },
+  "devDependencies": {
+    "mocha": "^6.2.1"
   }
 }
