@@ -2,6 +2,7 @@ const Mongo = require('mongodb');
 
 const make_usable_object = (client, dbname) => {
   return {
+    is_connected: () => client.isConnected(),
     objectid: id => (Mongo.ObjectID.isValid(id) ? Mongo.ObjectID(id) : null),
     create: (collection, data) => client.db(dbname)
       .collection(collection)

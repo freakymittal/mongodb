@@ -1,87 +1,139 @@
 const mongo = require('../index.js');
 const config = require('../config.json');
 const assert = require('assert');
-describe("Array", () => {
-  describe("#indexOf()", () => {
-    it("should return -1 when the value is not present", () => {
-      assert.equal([1,2,3].indexOf(4), -1)
-    })
-    it("should return -1 when the value is not present", () => {
-      assert.equal([1,2,3].indexOf(4), -1)
-    })
-  })
-  describe("#indexOf()", () => {
-    it("should return -1 when the value is not present", () => {
-      assert.equal([1,2,3].indexOf(4), -1)
-    })
-    it("should return -1 when the value is not present", () => {
-      assert.equal([1,2,3].indexOf(4), -1)
-    })
-  })
-})
-// process.env.dburl = 'mongodb+srv://intugine:NkVPR6VQUEXhyUwYHgQg4hjHspDH5k9a@cluster0-zhjde.mongodb.net';
-// process.env.dbname = 'furlenco';
-// let db = null;
-// mongo(process.env.dburl, process.env.dbname)
-//   .then((DB) => {
-//     db = DB;
-//     console.log('Connnected');
-//     return db.distinct('devices', "id")
-//     // return db.db('telenitytracking').count('trips');
-//     // return db.aggregate('consents', [{$group: {_id: "$status", data: {$first: "$$ROOT"}}}]);
-//     // return db.read('tokens', {}, 1, 0, {token: 1, _id: 0})
-//   })
-//   .then((r) => {
-//     console.log(r);
-//     db.close();
-//     // console.log('Disconnected');
-//   })
-//   .catch((e) => {
-//     console.error('Error', e);
-//   });
-// const MongoClient = require('mongodb').MongoClient;
-// const assert = require('assert');
-
-// Connection URL
-// const url = 'mongodb://localhost:27017';
-
-// Database Name
-// const dbName = 'myproject';
-
-// // Use connect method to connect to the server
-// MongoClient.connect(process.env.dburl, function(err, client) {
-//   assert.equal(null, err);
-//   console.log("Connected successfully to server");
-
-//   const db = client.db(process.env.dbname);
-// db.collection('tokens').find().toArray(function(err, docs) {
-//     assert.equal(err, null);
-//     console.log("Found the following records");
-//     console.log(docs);
-//     callback(docs);
-//   });
-//   // client.close();
-// });
-
-// const mongo = require('@intugine-technologies/mongodb')(process.env.dburl, process.env.dbname);
-//  let db = null;
-// mongo.then((DB) => {
-//  db = DB
-//  console.log(db)
-//  // return db.read('users', {}, 'all')
-// })
-// .then((r) => {
-//  console.log(r)
-//  return db.dbInstance.collection('users').find().limit(10).toArray()
-// })
-// .then((r) => {
-//  console.log(r)
-//  return db.clientInstance.db('mqtt').collection('users').find().count()
-// })
-// .then((r) => {
-//  console.log(r)
-// })
-// .catch((e) => {
-//  console.error(e)
-// })
-// console.log('Hi There')
+describe("Mongo DB", () => {
+    describe("Connection", () => {
+        let db = null;
+        let error = null;
+        it("Should connect successfully", (done) => {
+            mongo(config.DB_URI, 'furlenco')
+                .then((DB) => {
+                    db = DB;
+                    if (db.is_connected()) {
+                        db.close();
+                        done();
+                    } else done(db);
+                })
+                .catch((e) => {
+                    error = e;
+                    console.error(error);
+                    done(error);
+                });
+        });
+        it("Should fail connecting", (done) => {
+            mongo(config.DB_URI.replace("intugine", "xyz"), 'furlenco')
+                .then((DB) => {
+                    done({ message: "Not sure how it got here" });
+                })
+                .catch((e) => {
+                    if (e.message === "Authentication failed.") done();
+                    else done(e);
+                });
+        });
+    });
+    describe("Functions", () => {
+        let db = null;
+        before((done) => {
+            mongo(config.DB_URI, 'furlenco')
+                .then((DB) => {
+                    db = DB;
+                    done();
+                })
+                .catch((e) => {
+                    done(error);
+                });
+        });
+        describe("is_connected", () => {
+            it("Should return true", (done) => {
+                if (db && db.is_connected()) done();
+                else done(db);
+            });
+        });
+        describe("read", () => {
+            it("Should return 1 element without query", (done) => {
+                db.read("trips")
+                    .then((r) => {
+                        if (Array.isArray(r) && r.length === 1) done();
+                        else done(r);
+                    })
+                    .catch((e) => {
+                        done(e);
+                    })
+            });
+            it("Should return 1 element with query", (done) => {
+                db.read("trips", { device: "A467" })
+                    .then((r) => {
+                        if (Array.isArray(r) && r.length === 1) done();
+                        else done(r);
+                    })
+                    .catch((e) => {
+                        done(e);
+                    })
+            });
+            it("Should return more than 1 elements without query", (done) => {
+                db.read("trips", {}, 10)
+                    .then((r) => {
+                        if (Array.isArray(r) && r.length > 1) done();
+                        else done(r);
+                    })
+                    .catch((e) => {
+                        done(e);
+                    });
+            });
+            it("Should return more than 1 elements with query", (done) => {
+                db.read("trips", { device: "A467" }, 10)
+                    .then((r) => {
+                        if (Array.isArray(r) && r.length > 1) done();
+                        else done(r);
+                    })
+                    .catch((e) => {
+                        done(e);
+                    })
+            });
+        });
+        describe("distinct", () => {
+            it("Should find elements", (done) => {
+                db.distinct("devices", "id")
+                    .then((r) => {
+                        if (Array.isArray(r)) done();
+                        else done(r);
+                    })
+                    .catch((e) => {
+                        done(e);
+                    })
+            });
+        });
+        describe("objectid", () => {
+            it("Should return null", (done) => {
+                const objectid = db.objectid("ABCD")
+                if (!objectid) done();
+                else done(objectid);
+            });
+            it("Should return objectid", (done) => {
+                const objectid = db.objectid("5d9cc857f0013b13df9a31eb")
+                if (objectid) done();
+                else done(objectid);
+            });
+        });
+        describe("count", () => {
+            it("Should return a number", (done) => {
+                db.count('devices')
+                    .then((r) => {
+                        if (typeof(r) === "number") done();
+                        else done(r);
+                    })
+                    .catch((e) => {
+                        done(e);
+                    })
+            });
+        });
+        describe("close", () => {
+            it("Connection should be closed", (done) => {
+                setTimeout(() => {
+                    db.close();
+                    done();
+                })
+            });
+        });
+    });
+});

@@ -23,9 +23,9 @@
     "intugine",
     "promise"
   ],
-  "version": "1.12.4",
+  "version": "1.12.5",
   "engines": {
-    "node": ">=8.0.0 <12.10"
+    "node": ">=8.0.0"
   },
   "devDependencies": {
     "mocha": "^6.2.1"
