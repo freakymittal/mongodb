@@ -4,6 +4,7 @@ const make_usable_object = (client, dbname) => {
     return {
         is_connected: () => client.isConnected(),
         objectid: id => (Mongo.ObjectID.isValid(id) ? Mongo.ObjectID(id) : null),
+        is_valid_objectid: id => Mongo.ObjectID.isValid(id),
         create: (collection, data) => client.db(dbname)
             .collection(collection)
             .insertMany(

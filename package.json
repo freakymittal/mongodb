@@ -4,7 +4,7 @@
     "email": "mayankmittal@intugine.com"
   },
   "dependencies": {
-    "mongodb": "^3.5.2"
+    "mongodb": "^3.5.3"
   },
   "repository": {
     "type": "git",
@@ -23,7 +23,7 @@
     "intugine",
     "promise"
   ],
-  "version": "1.12.6",
+  "version": "1.12.7",
   "engines": {
     "node": ">=8.0.0"
   },
