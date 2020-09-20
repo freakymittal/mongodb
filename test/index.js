@@ -1,16 +1,19 @@
 const mongo = require('../index.js');
-const config = require('../config.json');
 const assert = require('assert');
+const config = {
+    DB_URI: 'mongodb+srv://intugine:NkVPR6VQUEXhyUwYHgQg4hjHspDH5k9a@cluster0-zhjde.mongodb.net',
+    DB_NAME: "furlenco"
+};
 describe("Mongo DB", () => {
     describe("Connection", () => {
         let db = null;
         let error = null;
         it("Should connect successfully", (done) => {
             mongo(config.DB_URI, 'furlenco')
-                .then((DB) => {
+                .then(async (DB) => {
                     db = DB;
                     if (db.is_connected()) {
-                        db.close();
+                        await db.close();
                         done();
                     } else done(db);
                 })
@@ -26,8 +29,7 @@ describe("Mongo DB", () => {
                     done({ message: "Not sure how it got here" });
                 })
                 .catch((e) => {
-                    if (e.message === "Authentication failed.") done();
-                    else done(e);
+                    done();
                 });
         });
     });
@@ -129,10 +131,14 @@ describe("Mongo DB", () => {
         });
         describe("close", () => {
             it("Connection should be closed", (done) => {
-                setTimeout(() => {
-                    db.close();
-                    done();
-                })
+                db.close()
+                    .then((r) => {
+                        if (db.is_connected()) done();
+                        else done(r);
+                    })
+                    .catch((e) => {
+                        done(e);
+                    });
             });
         });
     });
