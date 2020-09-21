@@ -1,6 +1,6 @@
 const mongo = require('../index.js');
 const config = {
-	DB_URI: 'mongodb+srv://cluster0-zhjde.mongodb.net',
+	DB_URI: process.env.DB__URI,
 	DB_NAME: "furlenco"
 };
 
@@ -8,8 +8,8 @@ let db = null;
 
 mongo(config.DB_URI, config.DB_NAME, {
 		auth: {
-			user: "intugine",
-			password: "NkVPR6VQUEXhyUwYHgQg4hjHspDH5k9a"
+			user: process.env.DB__USER,
+			password: process.env.DB__PASS
 		}
 	})
 	.then((DB) => {

@@ -1,7 +1,7 @@
 const mongo = require('../index.js');
 const assert = require('assert');
 const config = {
-    DB_URI: 'mongodb+srv://intugine:NkVPR6VQUEXhyUwYHgQg4hjHspDH5k9a@cluster0-zhjde.mongodb.net',
+    DB_URI: process.env.DB__URI,
     DB_NAME: "furlenco"
 };
 describe("Mongo DB", () => {
